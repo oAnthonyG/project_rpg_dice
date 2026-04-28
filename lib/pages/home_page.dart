@@ -13,12 +13,29 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _result = '0';
   final List<String> _history = [];
+  final List<int> _diceValues = [4, 6, 8, 10, 12, 20];
 
-  void rollD(int dado) {
+  void _rollD(int dice) {
     setState(() {
-      _result = (Random().nextInt(dado) + 1).toString();
-      _history.insert(0, 'D$dado: $_result');
+      _result = (Random().nextInt(dice) + 1).toString();
+      _history.insert(0, 'D$dice: $_result');
+
+      if (_history.length > 20) {
+        _history.removeLast();
+      }
     });
+  }
+
+  Widget _boxDice(int dice) {
+    return ElevatedButton(
+      onPressed: () => _rollD(dice),
+      style: ElevatedButton.styleFrom(
+        textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        minimumSize: const Size(100, 60),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      ),
+      child: Text('D$dice', style: const TextStyle(color: Colors.black87)),
+    );
   }
 
   @override
@@ -28,70 +45,56 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(
           widget.title,
-          style: TextStyle(letterSpacing: 1.5, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [rollDices()],
-            ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 16.0,
+            runSpacing: 16.0,
+            alignment: WrapAlignment.center,
+            children: _diceValues.map((value) => _boxDice(value)).toList(),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 30),
           Column(
             children: [
-              Text('Result'),
+              const Text('Result'),
               Text(
                 _result,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-          SizedBox(height: 20),
-          history(),
+          const SizedBox(height: 20),
+          _buildHistory(),
         ],
       ),
     );
   }
 
-  Expanded history() {
+  Expanded _buildHistory() {
     return Expanded(
       child: ListView.builder(
-        padding: EdgeInsetsGeometry.directional(start: 8),
-        itemCount: _history.length < 20 ? _history.length : 20,
-        
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        itemCount: _history.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(
               _history[index],
-              style: TextStyle(letterSpacing: 1.5),
+              style: const TextStyle(letterSpacing: 1.5),
             ),
           );
         },
       ),
-    );
-  }
-
-  Column rollDices() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(onPressed: () => rollD(20), child: Text('D20')),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(onPressed: () => rollD(6), child: Text('D6')),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(onPressed: () => rollD(4), child: Text('D4')),
-        ),
-      ],
     );
   }
 }

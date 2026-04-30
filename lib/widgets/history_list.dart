@@ -13,10 +13,11 @@ class _HistoryListState extends State<HistoryList> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+
       child: ListView.builder(
         itemCount: widget.history.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(widget.history[index].toString()));
+          return ListTile(title: Text(widget.history[index].toString(), style: TextStyle(fontSize: 14),),);
         },
       ),
     );

@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Color.fromARGB(255, 43, 36, 36),
         title: Center(
           child: Text(
             widget.title,
@@ -44,28 +44,38 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+      backgroundColor: Color.fromARGB(255, 43, 36, 36),
       body: Column(
         children: [
-          SizedBox(height: 16),
+          SizedBox(height: 90),
+          Column(
+            children: [
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return RotationTransition(turns: animation, child: child);
+                },
+                child: Text(
+                  '$_result',
+                  key: ValueKey(_result),
+                  style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 90),
           Wrap(
-            spacing: 16,
+            spacing: 10,
             runSpacing: 16,
             alignment: WrapAlignment.center,
             children: _diceValues.map((dice) {
               return DiceButton(dice: dice, onPressed: () => _rollD(dice));
             }).toList(),
           ),
-          SizedBox(height: 30),
-          Column(
-            children: [
-              Text('Result'),
-              Text(
-                '$_result',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
           SizedBox(height: 20),
+          Divider(thickness: 1, indent: 40, endIndent: 30),
           HistoryList(history: _history),
         ],
       ),

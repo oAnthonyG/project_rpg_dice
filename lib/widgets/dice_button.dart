@@ -11,11 +11,11 @@ class DiceButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        minimumSize: Size(100, 60),
+        textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
-      child: Text('D$dice', style: TextStyle(color: Colors.black87)),
+      child: Text('D$dice'),
     );
   }
 }
